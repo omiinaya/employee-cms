@@ -4,6 +4,9 @@ const cTable = require("console.table");
 const menu = require("./Assets/menu.js");
 const connection = require("./Assets/db.js");
 
+//definitions and global vars
+var currRole;
+
 //functions
 function exec() {
     inquirer.prompt(menu.mainMenu).then(function (response) {
@@ -87,6 +90,21 @@ function choiceUpdate() {
     });
 }
 
+function parseRole(a) {
+    if (a == "management") {
+        currRole = 1;
+    }
+    else if (a == "engineering") {
+        currRole = 2;
+    }
+    else if (a == "legal") {
+        currRole = 3;
+    }
+    else if (a == "sales") {
+        currRole = 4;
+    }
+} 
+
 function loadDepartments() {
     connection.query("SELECT * FROM department", function (err, res) {
         console.table(res);
@@ -137,21 +155,7 @@ function employeesByRole() {
             ]
         }
     ).then(function (data) {
-        var currRole;
-        switch (data.roleId) {
-            case "management":
-                currRole = 1;
-            break;
-            case "engineering":
-                currRole = 2;
-            break;
-            case "legal":
-                currRole = 3;
-            break;
-            case "sales":
-                currRole = 4;
-            break;
-        }
+        parseRole(data.roleId);
         connection.query("SELECT * FROM employee WHERE role_id='"+currRole+"'", function (err, res) {
             console.table(res);
             choiceView();
@@ -175,19 +179,7 @@ function addRoleMenu() {
 
 function addEmployeeMenu() {
     inquirer.prompt(menu.addEmployee).then(function (answers) {
-        var currRole;
-        if (answers.role === "management") {
-            currRole = 1;
-        }
-        else if (answers.role === "engineering") {
-            currRole = 2;
-        }
-        else if (answers.role === "legal") {
-            currRole = 3;
-        }
-        else if (answers.role === "sales") {
-            currRole = 4;
-        }
+        parseRole(answers.role);
         connection.query(
             "INSERT INTO employee SET ?",
             {
@@ -199,7 +191,7 @@ function addEmployeeMenu() {
             function (err) {
 
                 if (err) throw err;
-                console.log("Your auction was created successfully!");
+                console.log("Your employee was created successfully!");
                 choiceAdd();
             }
         );
