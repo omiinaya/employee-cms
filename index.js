@@ -90,6 +90,21 @@ function loadEmployees() {
     });
 }
 
+function employeesByManager() {
+    inquirer.prompt(
+        {
+            type: "input",
+            name: "managerId",
+            message: "Please enter manager ID: "
+        }
+    ).then(function (data) {
+        connection.query("SELECT * FROM employee WHERE manager_id='"+data.managerId+"'", function (err, res) {
+            console.table(res);
+            choiceView();
+        });
+    });
+}
+
 function sortEmployees() {
     inquirer.prompt(menu.viewEmployeesBy).then(function (response) {
         switch (response.employeesBy) {
@@ -97,6 +112,9 @@ function sortEmployees() {
                 loadEmployees();
                 break;
             case "view employees by role":
+                break;
+            case "view employees by manager":
+                employeesByManager();
                 break;
         }
     });
@@ -140,6 +158,7 @@ function addEmployeeMenu() {
                 manager_id: answers.managerId
             },
             function (err) {
+
                 if (err) throw err;
                 console.log("Your auction was created successfully!");
                 choiceAdd();
