@@ -69,6 +69,29 @@ const menu = {
             ]
         }
     ],
+    addEmployee:
+    [
+        {
+            type: "input",
+            name: "firstName",
+            message: "What is the first name of the employee?",
+        },
+        {
+            type: "input",
+            name: "lastName",
+            message: "What is the last name of the employee?",
+        },
+        {
+            type: "list",
+            name: "employeeRole",
+            message: "What is the employees role?",
+        },
+        {
+            type: "list",
+            name: "employeeManager",
+            message: "What is the employee's manager?",
+        }
+    ],
 }
 
 module.exports = menu;

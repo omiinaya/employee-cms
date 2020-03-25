@@ -47,10 +47,10 @@ function choiceAdd() {
                 //
                 break;
             case "add role":
-                //
+                addRoleMenu();
                 break;
             case "add employee":
-                //
+                addEmployeeMenu();
                 break;
             case "main menu":
                 exec();
@@ -99,9 +99,29 @@ function loadDB(query) {
 function sortEmployees() {
     inquirer.prompt(menu.viewEmployeesBy).then(function (response) {
         switch (response.employeesBy) {
-            case "view all employees": 
-            loadDB(queryEmployees);
-            break;
+            case "view all employees":
+                loadDB(queryEmployees);
+                break;
+            case "view employees by role":
+                break;
         }
+    });
+}
+
+function addEmployeeMenu() {
+    inquirer.prompt(menu.addEmployee).then(function (response) {
+        //
+    });
+}
+
+function addRoleMenu() {
+    inquirer.prompt(menu.addRole).then(function (response) {
+        //
+    });
+}
+
+function addDepartmentMenu() {
+    inquirer.prompt(menu.addDepartment).then(function (response) {
+        //
     });
 }
