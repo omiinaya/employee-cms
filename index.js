@@ -4,11 +4,6 @@ const cTable = require("console.table");
 const menu = require("./Assets/menu.js");
 const connection = require("./db.js");
 
-//query definitions
-const queryDepartments = "SELECT * FROM department"
-const queryRoles = "SELECT * FROM role";
-const queryEmployees = "SELECT * FROM employee";
-
 //functions
 function exec() {
     inquirer.prompt(menu.mainMenu).then(function (response) {
