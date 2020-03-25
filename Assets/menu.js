@@ -100,13 +100,9 @@ const menu = {
         [
 
             {
-                type: "list",
-                name: "roleId",
-                message: "Please choose role to filter by: ",
-                choices: [
-                    "test",
-                    "test2"
-                ]
+                type: "input",
+                name: "departmentId",
+                message: "Please enter department id: "
             }
 
         ],

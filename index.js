@@ -76,6 +76,9 @@ function sortEmployees() {
             case "view employees by manager":
                 employeesByManager();
                 break;
+            case "view employees by department":
+                employeesByDepartment();
+                break;
             case "main menu":
                 exec();
                 break;
@@ -149,13 +152,7 @@ function employeesByRole() {
 }
 
 function employeesByDepartment() {
-    inquirer.prompt(menu.employeesByDept).then(function (data) {
-        parseRole(data.roleId);
-        connection.query("SELECT * FROM employee WHERE role_id='"+currRole+"'", function (err, res) {
-            console.table(res);
-            sortEmployees()
-        });
-    });
+    //
 }
 
 function addDepartmentMenu() {
