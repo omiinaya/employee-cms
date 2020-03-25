@@ -1,39 +1,25 @@
 //libraries and extensions
-const fs = require("fs");
-const mysql = require("mysql");
 const inquirer = require("inquirer");
-const cTable = require('console.table');
+const cTable = require("console.table");
 const menu = require("./Assets/menu.js");
+const connection = require("./db.js");
 
 //query definitions
 const queryDepartments = "SELECT * FROM department"
 const queryRoles = "SELECT * FROM role";
 const queryEmployees = "SELECT * FROM employee";
 
-//db connection
-var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "root",
-    database: "cmsDB"
-});
-connection.connect(function (err) {
-    if (err) throw err;
-    exec();
-});
-
 //functions
 function exec() {
     inquirer.prompt(menu.mainMenu).then(function (response) {
         switch (response.mainSelect) {
-            case "Add":
+            case "add":
                 choiceAdd();
                 break;
-            case "View":
+            case "view":
                 choiceView();
                 break;
-            case "Update":
+            case "update":
                 choiceUpdate();
                 break;
         }
@@ -123,8 +109,21 @@ function addRoleMenu() {
 }
 
 function addEmployeeMenu() {
-    console.log("placeholder");
-    inquirer.prompt(menu.addEmployee).then(function (response) {
-        //
+    inquirer.prompt(menu.addEmployee).then(function (answers) {
+        connection.query(
+            "INSERT INTO employee SET ?",
+            {
+              first_name: answers.firstName,
+              last_name: answers.lastName,
+            },
+            function(err) {
+              if (err) throw err;
+              console.log("Your auction was created successfully!");
+              // re-prompt the user for if they want to bid or post
+              start();
+            }
+          );
     });
 }
+
+var init = new exec();

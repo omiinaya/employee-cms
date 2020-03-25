@@ -6,9 +6,9 @@ const menu = {
                 name: "mainSelect",
                 message: "What would you like to do?",
                 choices: [
-                    "Add",
-                    "View",
-                    "Update"
+                    "add",
+                    "view",
+                    "update"
                 ]
             }
         ],
@@ -82,10 +82,14 @@ const menu = {
             message: "What is the last name of the employee?",
         },
         {
-            type: "list",
-            name: "employeeRole",
-            message: "What is the employees role?",
-            choices: []
+            type: "rawlist",
+            name: "roles",
+            choices: function() {
+                connection.query("SELECT * FROM role", function(err, results) {
+                    console.log(results[0]);
+                });
+            },
+            message: "test"
         },
         {
             type: "list",
