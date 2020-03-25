@@ -2,6 +2,7 @@
 const fs = require("fs");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const cTable = require('console.table');
 //extensions
 const menu = require("./Assets/menu.js");
 //db connection
@@ -12,8 +13,8 @@ var connection = mysql.createConnection({
     password: "root",
     database: "cmsDB"
 });
-
-connection.connect(function(err) {
+//exec start
+connection.connect(function (err) {
     if (err) throw err;
     exec();
 });
@@ -65,48 +66,35 @@ function choiceView() {
             case "main menu":
                 exec();
                 break;
-        }         
+        }
     });
 }
 
 function choiceUpdate() {
     inquirer.prompt(menu.updateMenu).then(function (response) {
-    //
     });
 }
 
 function loadDepartments() {
     console.log("-----------------------------------");
-    connection.query("SELECT * FROM department", function(err, res) {
-      if (err) throw err;
-      for (var i = 0; i < res.length; i++) {
-        console.log(res[i].id + " | " + res[i].name);
-      }
-      console.log("-----------------------------------");
-      choiceView();
+    connection.query("SELECT * FROM department", function (err, res) {
+        console.table(res);
+        choiceView();
     });
-  }
+}
 
 function loadRoles() {
     console.log("-----------------------------------");
-    connection.query("SELECT * FROM role", function(err, res) {
-      if (err) throw err;
-      for (var i = 0; i < res.length; i++) {
-        console.log(res[i].id + " | " + res[i].title + " | " + res[i].salary + " | " + res[i].department_id);
-      }
-      console.log("-----------------------------------");
-      choiceView();
+    connection.query("SELECT * FROM role", function (err, res) {
+        console.table(res);
+        choiceView();
     });
 }
 
 function loadEmployees() {
     console.log("-----------------------------------");
-    connection.query("SELECT * FROM employee", function(err, res) {
-      if (err) throw err;
-      for (var i = 0; i < res.length; i++) {
-        console.log(res[i].id + " | " + res[i].first_name + " | " + res[i].last_name + " | " + res[i].role_id + " | " + res[i].manager_id);
-      }
-      console.log("-----------------------------------");
-      choiceView();
+    connection.query("SELECT * FROM employee", function (err, res) {
+        console.table(res);
+        choiceView();
     });
 }
