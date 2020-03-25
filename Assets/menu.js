@@ -19,9 +19,9 @@ const menu = {
                 name: "addSelect",
                 message: "What would you like to add?",
                 choices: [
-                    "Department",
-                    "Role",
-                    "Employee"
+                    "add department",
+                    "add role",
+                    "add employee"
                 ]
             }
         ],
@@ -32,9 +32,9 @@ const menu = {
                 name: "viewSelect",
                 message: "What would you like to view?",
                 choices: [
-                    "Departments",
-                    "Roles",
-                    "Employees"
+                    "view departments",
+                    "view roles",
+                    "view employees"
                 ]
             }
         ],
