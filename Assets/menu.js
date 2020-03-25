@@ -96,6 +96,20 @@ const menu = {
             }
 
         ],
+    employeesByDept:
+        [
+
+            {
+                type: "list",
+                name: "roleId",
+                message: "Please choose role to filter by: ",
+                choices: [
+                    "test",
+                    "test2"
+                ]
+            }
+
+        ],
     addEmployee:
         [
             {

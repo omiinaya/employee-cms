@@ -76,6 +76,9 @@ function sortEmployees() {
             case "view employees by manager":
                 employeesByManager();
                 break;
+            case "main menu":
+                exec();
+                break;
         }
     });
 }
@@ -130,7 +133,7 @@ function employeesByManager() {
     inquirer.prompt(menu.employeesByManager).then(function (data) {
         connection.query("SELECT * FROM employee WHERE manager_id='"+data.managerId+"'", function (err, res) {
             console.table(res);
-            choiceView();
+            sortEmployees()
         });
     });
 }
@@ -140,7 +143,17 @@ function employeesByRole() {
         parseRole(data.roleId);
         connection.query("SELECT * FROM employee WHERE role_id='"+currRole+"'", function (err, res) {
             console.table(res);
-            choiceView();
+            sortEmployees()
+        });
+    });
+}
+
+function employeesByDepartment() {
+    inquirer.prompt(menu.employeesByDept).then(function (data) {
+        parseRole(data.roleId);
+        connection.query("SELECT * FROM employee WHERE role_id='"+currRole+"'", function (err, res) {
+            console.table(res);
+            sortEmployees()
         });
     });
 }
