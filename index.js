@@ -1,10 +1,15 @@
-//libraries
+//libraries and extensions
 const fs = require("fs");
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
-//extensions
 const menu = require("./Assets/menu.js");
+
+//query definitions
+const queryDepartments = "SELECT * FROM department"
+const queryRoles = "SELECT * FROM role";
+const queryEmployees = "SELECT * FROM employee";
+
 //db connection
 var connection = mysql.createConnection({
     host: "localhost",
@@ -13,15 +18,11 @@ var connection = mysql.createConnection({
     password: "root",
     database: "cmsDB"
 });
-//exec start
 connection.connect(function (err) {
     if (err) throw err;
     exec();
 });
-//definitions
-const queryDepartments = "SELECT * FROM department"
-const queryRoles = "SELECT * FROM role";
-const queryEmployees = "SELECT * FROM employee";
+
 //functions
 function exec() {
     inquirer.prompt(menu.mainMenu).then(function (response) {
@@ -51,6 +52,9 @@ function choiceAdd() {
             case "add employee":
                 //
                 break;
+            case "main menu":
+                exec();
+                break;
         }
     });
 }
@@ -65,7 +69,7 @@ function choiceView() {
                 loadDB(queryRoles);
                 break;
             case "view employees":
-                loadDB(queryEmployees);
+                sortEmployees();
                 break;
             case "main menu":
                 exec();
@@ -76,13 +80,28 @@ function choiceView() {
 
 function choiceUpdate() {
     inquirer.prompt(menu.updateMenu).then(function (response) {
+        switch (response.updateSelect) {
+            case "main menu":
+                exec()
+                break;
+        }
     });
 }
 
-function loadDB(a) {
-    console.log("-----------------------------------");
-    connection.query(a, function (err, res) {
+function loadDB(query) {
+    console.log("-------------------------------------------------");
+    connection.query(query, function (err, res) {
         console.table(res);
         choiceView();
+    });
+}
+
+function sortEmployees() {
+    inquirer.prompt(menu.viewEmployeesBy).then(function (response) {
+        switch (response.employeesBy) {
+            case "view all employees": 
+            loadDB(queryEmployees);
+            break;
+        }
     });
 }

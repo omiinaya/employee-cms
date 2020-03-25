@@ -21,7 +21,8 @@ const menu = {
                 choices: [
                     "add department",
                     "add role",
-                    "add employee"
+                    "add employee",
+                    "main menu"
                 ]
             }
         ],
@@ -46,12 +47,28 @@ const menu = {
                 name: "updateSelect",
                 message: "What would you like to update?",
                 choices: [
-                    "Departments",
-                    "Roles",
-                    "Employees"
+                    "departments",
+                    "roles",
+                    "employees",
+                    "main menu"
                 ]
             }
         ],
+    viewEmployeesBy:
+    [
+        {
+            type: "list",
+            name: "employeesBy",
+            message: "Sort employees by: ",
+            choices: [
+                "view all employees",
+                "view employees by role",
+                "view employees by manager",
+                "view employees by department",
+                "main menu"
+            ]
+        }
+    ],
 }
 
 module.exports = menu;
