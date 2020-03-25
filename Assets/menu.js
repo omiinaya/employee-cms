@@ -1,3 +1,7 @@
+const connection = require("../db.js");
+var choiceArray=[];
+
+
 const menu = {
     mainMenu:
         [
@@ -81,22 +85,6 @@ const menu = {
             name: "lastName",
             message: "What is the last name of the employee?",
         },
-        {
-            type: "rawlist",
-            name: "roles",
-            choices: function() {
-                connection.query("SELECT * FROM role", function(err, results) {
-                    console.log(results[0]);
-                });
-            },
-            message: "test"
-        },
-        {
-            type: "list",
-            name: "employeeManager",
-            message: "What is the employee's manager?",
-            choices: []
-        }
     ],
 }
 
