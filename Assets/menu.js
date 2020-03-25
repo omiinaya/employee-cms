@@ -1,4 +1,4 @@
-const connection = require("../db.js");
+const connection = require("./db.js");
 
 const menu = {
     mainMenu:
@@ -57,47 +57,55 @@ const menu = {
             }
         ],
     viewEmployeesBy:
-    [
-        {
-            type: "list",
-            name: "employeesBy",
-            message: "Sort employees by: ",
-            choices: [
-                "view all employees",
-                "view employees by role",
-                "view employees by manager",
-                "view employees by department",
-                "main menu"
-            ]
-        }
-    ],
+        [
+            {
+                type: "list",
+                name: "employeesBy",
+                message: "Sort employees by: ",
+                choices: [
+                    "view all employees",
+                    "view employees by role",
+                    "view employees by manager",
+                    "view employees by department",
+                    "main menu"
+                ]
+            }
+        ],
     addEmployee:
-    [
-        {
-            type: "input",
-            name: "firstName",
-            message: "What is the first name of the employee?",
-        },
-        {
-            type: "input",
-            name: "lastName",
-            message: "What is the last name of the employee?",
-        },
-        {
-            name: "choice",
-            type: "rawlist",
-            choices: function() {
-              var choiceArray = [];
-              connection.query("SELECT * FROM role", function(err, results) {
-                for (var i = 0; i < results.length; i++) {
-                    choiceArray.push(results[i].id);
-                  }
-              });
-              return choiceArray;
+        [
+            {
+                type: "input",
+                name: "firstName",
+                message: "What is the first name of the employee?",
             },
-            message: "Select the employee's role: "
-          },
-    ],
+            {
+                type: "input",
+                name: "lastName",
+                message: "What is the last name of the employee?",
+            },
+            {
+                type: "list",
+                name: "role",
+                message: "Select the employee's role: ",
+                choices: [
+                    "management",
+                    "engineering",
+                    "legal",
+                    "sales"
+                ]
+            },
+            {
+                type: "input",
+                name: "managerId",
+                message: "Please enter the employee manager's ID: ",
+                choices: [
+                    "management",
+                    "engineering",
+                    "legal",
+                    "sales"
+                ]
+            },
+        ],
 }
 
 module.exports = menu;

@@ -2,7 +2,7 @@
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 const menu = require("./Assets/menu.js");
-const connection = require("./db.js");
+const connection = require("./Assets/db.js");
 
 //functions
 function exec() {
@@ -118,15 +118,31 @@ function addRoleMenu() {
 
 function addEmployeeMenu() {
     inquirer.prompt(menu.addEmployee).then(function (answers) {
+        var currRole;
+        if (answers.role === "management") {
+            currRole = 1;
+        }
+        else if (answers.role === "engineering") {
+            currRole = 2;
+        }
+        else if (answers.role === "legal") {
+            currRole = 3;
+        }
+        else if (answers.role === "sales") {
+            currRole = 4;
+        }
         connection.query(
             "INSERT INTO employee SET ?",
             {
                 first_name: answers.firstName,
                 last_name: answers.lastName,
+                role_id: currRole,
+                manager_id: answers.managerId
             },
             function (err) {
                 if (err) throw err;
                 console.log("Your auction was created successfully!");
+                choiceAdd();
             }
         );
     });
