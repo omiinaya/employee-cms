@@ -72,6 +72,30 @@ const menu = {
                 ]
             }
         ],
+    employeesByManager:
+        [
+            {
+                type: "input",
+                name: "managerId",
+                message: "Please enter manager id: "
+            }
+        ],
+    employeesByRole:
+        [
+
+            {
+                type: "list",
+                name: "roleId",
+                message: "Please choose role to filter by: ",
+                choices: [
+                    "management",
+                    "engineering",
+                    "legal",
+                    "sales"
+                ]
+            }
+
+        ],
     addEmployee:
         [
             {

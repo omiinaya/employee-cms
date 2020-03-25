@@ -127,13 +127,7 @@ function loadEmployees() {
 }
 
 function employeesByManager() {
-    inquirer.prompt(
-        {
-            type: "input",
-            name: "managerId",
-            message: "Please enter manager id: "
-        }
-    ).then(function (data) {
+    inquirer.prompt(menu.employeesByManager).then(function (data) {
         connection.query("SELECT * FROM employee WHERE manager_id='"+data.managerId+"'", function (err, res) {
             console.table(res);
             choiceView();
@@ -142,19 +136,7 @@ function employeesByManager() {
 }
 
 function employeesByRole() {
-    inquirer.prompt(
-        {
-            type: "list",
-            name: "roleId",
-            message: "Please choose role to filter by: ",
-            choices: [
-                "management",
-                "engineering",
-                "legal",
-                "sales"
-            ]
-        }
-    ).then(function (data) {
+    inquirer.prompt(menu.employeesByRole).then(function (data) {
         parseRole(data.roleId);
         connection.query("SELECT * FROM employee WHERE role_id='"+currRole+"'", function (err, res) {
             console.table(res);
