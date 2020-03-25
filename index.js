@@ -8,18 +8,30 @@ function exec() {
     inquirer.prompt(menu.mainMenu).then(function (response) {
         switch (response.mainSelect) {
             case "Add":
-                inquirer.prompt(menu.addMenu).then(function (addRes) {
-                });
+                choiceAdd();
                 break;
             case "View":
-                inquirer.prompt(menu.viewMenu).then(function (viewRes) {
-                });
+                choiceView();
                 break;
             case "Update":
-                inquirer.prompt(menu.updateMenu).then(function (updateRes) {
-                });
+                choiceUpdate();
                 break;
         }
+    });
+}
+
+function choiceAdd() {
+    inquirer.prompt(menu.addMenu).then(function (addRes) {
+    });
+}
+
+function choiceView() {
+    inquirer.prompt(menu.viewMenu).then(function (viewRes) {             
+    });
+}
+
+function choiceUpdate() {
+    inquirer.prompt(menu.updateMenu).then(function (updateRes) {
     });
 }
 
