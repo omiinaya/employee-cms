@@ -30,7 +30,7 @@ function choiceAdd() {
     inquirer.prompt(menu.addMenu).then(function (response) {
         switch (response.addSelect) {
             case "add department":
-                addDepartmentMenu()
+                addDepartmentMenu();
                 break;
             case "add role":
                 addRoleMenu();
@@ -49,10 +49,10 @@ function choiceView() {
     inquirer.prompt(menu.viewMenu).then(function (response) {
         switch (response.viewSelect) {
             case "view departments":
-                loadDB(queryDepartments);
+                loadDepartments();
                 break;
             case "view roles":
-                loadDB(queryRoles);
+                loadRoles();
                 break;
             case "view employees":
                 sortEmployees();
@@ -74,9 +74,22 @@ function choiceUpdate() {
     });
 }
 
-function loadDB(query) {
-    console.log("-------------------------------------------------");
-    connection.query(query, function (err, res) {
+function loadDepartments() {
+    connection.query("SELECT * FROM department", function (err, res) {
+        console.table(res);
+        choiceView();
+    });
+}
+
+function loadRoles() {
+    connection.query("SELECT * FROM role", function (err, res) {
+        console.table(res);
+        choiceView();
+    });
+}
+
+function loadEmployees() {
+    connection.query("SELECT * FROM employee", function (err, res) {
         console.table(res);
         choiceView();
     });
@@ -86,7 +99,7 @@ function sortEmployees() {
     inquirer.prompt(menu.viewEmployeesBy).then(function (response) {
         switch (response.employeesBy) {
             case "view all employees":
-                loadDB(queryEmployees);
+                loadEmployees();
                 break;
             case "view employees by role":
                 break;
@@ -113,14 +126,14 @@ function addEmployeeMenu() {
         connection.query(
             "INSERT INTO employee SET ?",
             {
-              first_name: answers.firstName,
-              last_name: answers.lastName,
+                first_name: answers.firstName,
+                last_name: answers.lastName,
             },
-            function(err) {
-              if (err) throw err;
-              console.log("Your auction was created successfully!");
+            function (err) {
+                if (err) throw err;
+                console.log("Your auction was created successfully!");
             }
-          );
+        );
     });
 }
 
