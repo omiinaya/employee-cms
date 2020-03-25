@@ -1,6 +1,4 @@
 const connection = require("../db.js");
-var choiceArray=[];
-
 
 const menu = {
     mainMenu:
@@ -85,6 +83,20 @@ const menu = {
             name: "lastName",
             message: "What is the last name of the employee?",
         },
+        {
+            name: "choice",
+            type: "rawlist",
+            choices: function() {
+              var choiceArray = [];
+              connection.query("SELECT * FROM role", function(err, results) {
+                for (var i = 0; i < results.length; i++) {
+                    choiceArray.push(results[i].id);
+                  }
+              });
+              return choiceArray;
+            },
+            message: "Select the employee's role: "
+          },
     ],
 }
 
