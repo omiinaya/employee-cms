@@ -85,11 +85,13 @@ const menu = {
             type: "list",
             name: "employeeRole",
             message: "What is the employees role?",
+            choices: []
         },
         {
             type: "list",
             name: "employeeManager",
             message: "What is the employee's manager?",
+            choices: []
         }
     ],
 }

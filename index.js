@@ -44,7 +44,7 @@ function choiceAdd() {
     inquirer.prompt(menu.addMenu).then(function (response) {
         switch (response.addSelect) {
             case "add department":
-                //
+                addDepartmentMenu()
                 break;
             case "add role":
                 addRoleMenu();
@@ -108,20 +108,23 @@ function sortEmployees() {
     });
 }
 
-function addEmployeeMenu() {
-    inquirer.prompt(menu.addEmployee).then(function (response) {
+function addDepartmentMenu() {
+    console.log("placeholder");
+    inquirer.prompt(menu.addDepartment).then(function (response) {
         //
     });
 }
 
 function addRoleMenu() {
+    console.log("placeholder");
     inquirer.prompt(menu.addRole).then(function (response) {
         //
     });
 }
 
-function addDepartmentMenu() {
-    inquirer.prompt(menu.addDepartment).then(function (response) {
+function addEmployeeMenu() {
+    console.log("placeholder");
+    inquirer.prompt(menu.addEmployee).then(function (response) {
         //
     });
 }
