@@ -18,6 +18,10 @@ connection.connect(function (err) {
     if (err) throw err;
     exec();
 });
+//definitions
+const queryDepartments = "SELECT * FROM department"
+const queryRoles = "SELECT * FROM role";
+const queryEmployees = "SELECT * FROM employee";
 //functions
 function exec() {
     inquirer.prompt(menu.mainMenu).then(function (response) {
@@ -55,13 +59,13 @@ function choiceView() {
     inquirer.prompt(menu.viewMenu).then(function (response) {
         switch (response.viewSelect) {
             case "view departments":
-                loadDepartments();
+                loadDB(queryDepartments);
                 break;
             case "view roles":
-                loadRoles();
+                loadDB(queryRoles);
                 break;
             case "view employees":
-                loadEmployees();
+                loadDB(queryEmployees);
                 break;
             case "main menu":
                 exec();
@@ -75,25 +79,9 @@ function choiceUpdate() {
     });
 }
 
-function loadDepartments() {
+function loadDB(a) {
     console.log("-----------------------------------");
-    connection.query("SELECT * FROM department", function (err, res) {
-        console.table(res);
-        choiceView();
-    });
-}
-
-function loadRoles() {
-    console.log("-----------------------------------");
-    connection.query("SELECT * FROM role", function (err, res) {
-        console.table(res);
-        choiceView();
-    });
-}
-
-function loadEmployees() {
-    console.log("-----------------------------------");
-    connection.query("SELECT * FROM employee", function (err, res) {
+    connection.query(a, function (err, res) {
         console.table(res);
         choiceView();
     });
