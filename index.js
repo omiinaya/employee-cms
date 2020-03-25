@@ -57,7 +57,7 @@ function choiceView() {
                 loadDepartments();
                 break;
             case "view roles":
-                //
+                loadRoles();
                 break;
             case "view employees":
                 loadEmployees();
@@ -86,6 +86,18 @@ function loadDepartments() {
       choiceView();
     });
   }
+
+function loadRoles() {
+    console.log("-----------------------------------");
+    connection.query("SELECT * FROM role", function(err, res) {
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        console.log(res[i].id + " | " + res[i].title + " | " + res[i].salary + " | " + res[i].department_id);
+      }
+      console.log("-----------------------------------");
+      choiceView();
+    });
+}
 
 function loadEmployees() {
     console.log("-----------------------------------");
