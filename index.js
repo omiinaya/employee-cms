@@ -60,7 +60,7 @@ function choiceView() {
                 //
                 break;
             case "view employees":
-                //
+                loadEmployees();
                 break;
             case "main menu":
                 exec();
@@ -86,3 +86,15 @@ function loadDepartments() {
       choiceView();
     });
   }
+
+function loadEmployees() {
+    console.log("-----------------------------------");
+    connection.query("SELECT * FROM employee", function(err, res) {
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        console.log(res[i].id + " | " + res[i].first_name + " | " + res[i].last_name + " | " + res[i].role_id + " | " + res[i].manager_id);
+      }
+      console.log("-----------------------------------");
+      choiceView();
+    });
+}
