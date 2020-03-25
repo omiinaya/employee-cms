@@ -34,7 +34,8 @@ const menu = {
                 choices: [
                     "view departments",
                     "view roles",
-                    "view employees"
+                    "view employees",
+                    "main menu"
                 ]
             }
         ],

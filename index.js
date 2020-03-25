@@ -4,6 +4,19 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 //extensions
 const menu = require("./Assets/menu.js");
+//db connection
+var connection = mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "root",
+    database: "cmsDB"
+});
+
+connection.connect(function(err) {
+    if (err) throw err;
+    exec();
+});
 //functions
 function exec() {
     inquirer.prompt(menu.mainMenu).then(function (response) {
@@ -22,7 +35,7 @@ function exec() {
 }
 
 function choiceAdd() {
-    inquirer.prompt(menu.addMenu).then(function (addRes) {
+    inquirer.prompt(menu.addMenu).then(function (response) {
         switch (response.addSelect) {
             case "add department":
                 //
@@ -38,10 +51,10 @@ function choiceAdd() {
 }
 
 function choiceView() {
-    inquirer.prompt(menu.viewMenu).then(function (viewRes) {
+    inquirer.prompt(menu.viewMenu).then(function (response) {
         switch (response.viewSelect) {
             case "view departments":
-                //
+                loadDepartments();
                 break;
             case "view roles":
                 //
@@ -49,18 +62,27 @@ function choiceView() {
             case "view employees":
                 //
                 break;
+            case "main menu":
+                exec();
+                break;
         }         
     });
 }
 
 function choiceUpdate() {
-    inquirer.prompt(menu.updateMenu).then(function (updateRes) {
+    inquirer.prompt(menu.updateMenu).then(function (response) {
     //
     });
 }
 
-function viewDepartments() {
-
-}
-
-var execute = new exec();
+function loadDepartments() {
+    console.log("-----------------------------------");
+    connection.query("SELECT * FROM department", function(err, res) {
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        console.log(res[i].id + " | " + res[i].name);
+      }
+      console.log("-----------------------------------");
+      choiceView();
+    });
+  }
