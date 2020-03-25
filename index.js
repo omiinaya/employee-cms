@@ -17,6 +17,8 @@ function exec() {
             case "update":
                 choiceUpdate();
                 break;
+            case "exit":
+                process.exit();
         }
     });
 }
@@ -59,6 +61,22 @@ function choiceView() {
     });
 }
 
+function sortEmployees() {
+    inquirer.prompt(menu.viewEmployeesBy).then(function (response) {
+        switch (response.employeesBy) {
+            case "view all employees":
+                loadEmployees();
+                break;
+            case "view employees by role":
+                employeesByRole()
+                break;
+            case "view employees by manager":
+                employeesByManager();
+                break;
+        }
+    });
+}
+
 function choiceUpdate() {
     inquirer.prompt(menu.updateMenu).then(function (response) {
         switch (response.updateSelect) {
@@ -95,7 +113,7 @@ function employeesByManager() {
         {
             type: "input",
             name: "managerId",
-            message: "Please enter manager ID: "
+            message: "Please enter manager id: "
         }
     ).then(function (data) {
         connection.query("SELECT * FROM employee WHERE manager_id='"+data.managerId+"'", function (err, res) {
@@ -105,18 +123,39 @@ function employeesByManager() {
     });
 }
 
-function sortEmployees() {
-    inquirer.prompt(menu.viewEmployeesBy).then(function (response) {
-        switch (response.employeesBy) {
-            case "view all employees":
-                loadEmployees();
-                break;
-            case "view employees by role":
-                break;
-            case "view employees by manager":
-                employeesByManager();
-                break;
+function employeesByRole() {
+    inquirer.prompt(
+        {
+            type: "list",
+            name: "roleId",
+            message: "Please choose role to filter by: ",
+            choices: [
+                "management",
+                "engineering",
+                "legal",
+                "sales"
+            ]
         }
+    ).then(function (data) {
+        var currRole;
+        switch (data.roleId) {
+            case "management":
+                currRole = 1;
+            break;
+            case "engineering":
+                currRole = 2;
+            break;
+            case "legal":
+                currRole = 3;
+            break;
+            case "sales":
+                currRole = 4;
+            break;
+        }
+        connection.query("SELECT * FROM employee WHERE role_id='"+currRole+"'", function (err, res) {
+            console.table(res);
+            choiceView();
+        });
     });
 }
 

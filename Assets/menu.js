@@ -10,7 +10,8 @@ const menu = {
                 choices: [
                     "add",
                     "view",
-                    "update"
+                    "update",
+                    "exit"
                 ]
             }
         ],
@@ -98,12 +99,6 @@ const menu = {
                 type: "input",
                 name: "managerId",
                 message: "Please enter the employee manager's ID: ",
-                choices: [
-                    "management",
-                    "engineering",
-                    "legal",
-                    "sales"
-                ]
             },
         ],
 }
