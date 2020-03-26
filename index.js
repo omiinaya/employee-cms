@@ -96,7 +96,7 @@ function choiceUpdate() {
                 //
                 break;
             case "update employee role":
-                //
+                updateEmployeeRole()
                 break;
             case "update employee manager":
                 //
@@ -170,6 +170,7 @@ function employeesByManager() {
                         console.table(res);
                         sortEmployees()
                     });
+                    break;
                 }
             }
         });
@@ -196,6 +197,7 @@ function employeesByRole() {
                             console.table(res);
                             sortEmployees()
                         });
+                        break;
                     }
                 }
             });
@@ -384,6 +386,27 @@ function removeRole() {
             });
         });
     });
+}
+
+function updateEmployeeRole() {
+    var employees = [];
+    var name;
+    connection.query("SELECT * FROM employee", function (err, res) {
+        for (var i = 0; i < res.length; i++) {
+            name = res[i].first_name + " " + res[i].last_name;
+            employees.push(name);
+        }
+        inquirer.prompt({
+            type: "list",
+            name: "employeeRole",
+            message: "What employee would you like to update the role of?",
+            choices: employees
+
+        }).then(function (res) {
+
+        });
+    })
+
 }
 
 var init = new exec();
