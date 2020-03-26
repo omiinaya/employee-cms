@@ -121,21 +121,6 @@ function choiceUpdate() {
     });
 }
 
-function parseRole2(a) {
-    if (a == "management") {
-        currRole = 1;
-    }
-    else if (a == "engineering") {
-        currRole = 2;
-    }
-    else if (a == "legal") {
-        currRole = 3;
-    }
-    else if (a == "sales") {
-        currRole = 4;
-    }
-}
-
 function parseRole(a) {
     console.log("value of a: " + a);
     connection.query("SELECT * FROM role", function (err, res) {
@@ -145,7 +130,6 @@ function parseRole(a) {
             if (res[i].title == a) {
                 //console.log("test");
                 currRole = res[i].id;
-                console.log(currRole);
             }
         }
     });
@@ -212,10 +196,16 @@ function employeesByRole() {
             message: "Please choose employee's manager: ",
             choices: roles
         }).then(function (answer) {
-            parseRole(answer.roleSelect);
-            connection.query("SELECT * FROM employee WHERE role_id='" + currRole + "'", function (err, res) {
-                console.table(res);
-                sortEmployees()
+            connection.query("SELECT * FROM role", function (err, res) {
+                for (var i = 0; i < res.length; i++) {
+                    if (res[i].title == answer.roleSelect) {
+                        currRole = res[i].id;
+                        connection.query("SELECT * FROM employee WHERE role_id='" + currRole + "'", function (err, res) {
+                            console.table(res);
+                            sortEmployees()
+                        });
+                    }
+                }
             });
         });
     });
@@ -348,12 +338,11 @@ function removeEmployee() {
             for (var i = 0; i < resCopy.length; i++) {
                 if (name[i] == answer.employeeSelect) {
                     currEmployee = resCopy[i].id;
-                    console.log(currEmployee);
                     connection.query("DELETE FROM employee WHERE id='" + currEmployee + "'", function (err) {
 
                         if (err) throw err;
                         console.log("Your employee was deleted successfully!");
-                        choiceAdd();
+                        choiceRemove()
                     });
                 }
             }
@@ -376,11 +365,10 @@ function removeDepartment() {
             }
         ]).then(function (res) {
             currDepartment = res.selectDepartment;
-            console.log(currDepartment);
             connection.query("DELETE FROM department WHERE name='" + currDepartment + "'", function (err) {
                 if (err) throw err;
                 console.log("Your department was deleted successfully!");
-                choiceAdd();
+                choiceRemove()
             });
         });
     });
@@ -401,11 +389,10 @@ function removeRole() {
             }
         ]).then(function (res) {
             currRole = res.selectRole;
-            console.log(currRole);
             connection.query("DELETE FROM role WHERE title='" + currRole + "'", function (err) {
                 if (err) throw err;
                 console.log("Your role was deleted successfully!");
-                choiceAdd();
+                choiceRemove()
             });
         });
     });
