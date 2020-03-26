@@ -91,7 +91,7 @@ function choiceView() {
 
 function choiceUpdate() {
     inquirer.prompt(menu.updateMenu).then(function (response) {
-        switch (response.viewSelect) {
+        switch (response.updateSelect) {
             case "update employee":
                 //
                 break;

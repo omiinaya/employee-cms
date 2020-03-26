@@ -65,9 +65,9 @@ const menu = {
                 name: "updateSelect",
                 message: "What would you like to update?",
                 choices: [
-                    "departments",
-                    "roles",
-                    "employees",
+                    "update employee",
+                    "update employee role",
+                    "update employee manager",
                     "main menu"
                 ]
             }
