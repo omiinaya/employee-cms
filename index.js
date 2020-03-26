@@ -58,7 +58,7 @@ function choiceRemove() {
                 removeDepartment();
                 break;
             case "remove role":
-                //
+                removeRole();
                 break;
             case "remove employee":
                 removeEmployee();
@@ -380,6 +380,31 @@ function removeDepartment() {
             connection.query("DELETE FROM department WHERE name='" + currDepartment + "'", function (err) {
                 if (err) throw err;
                 console.log("Your department was deleted successfully!");
+                choiceAdd();
+            });
+        });
+    });
+}
+
+function removeRole() {
+    var roles = [];
+    connection.query("SELECT * FROM role", function (err, res) {
+        for (var i = 0; i < res.length; i++) {
+            roles.push(res[i].title);
+        }
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "selectRole",
+                message: "What role would you like to remove?",
+                choices: roles
+            }
+        ]).then(function (res) {
+            currRole = res.selectRole;
+            console.log(currRole);
+            connection.query("DELETE FROM role WHERE title='" + currRole + "'", function (err) {
+                if (err) throw err;
+                console.log("Your role was deleted successfully!");
                 choiceAdd();
             });
         });
