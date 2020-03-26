@@ -120,7 +120,7 @@ function choiceUpdate() {
     });
 }
 
-function parseRole(a) {
+function parseRole2(a) {
     if (a == "management") {
         currRole = 1;
     }
@@ -133,6 +133,21 @@ function parseRole(a) {
     else if (a == "sales") {
         currRole = 4;
     }
+}
+
+function parseRole(a) {
+    console.log("value of a: " + a);
+    connection.query("SELECT * FROM role", function (err, res) {
+        //console.log(res[0].title);
+        for (var i = 0; i < res.length; i++) {
+            //console.log(res[i].title);
+            if (res[i].title == a) {
+                //console.log("test");
+                currRole = res[i].id;
+                console.log(currRole);
+            }
+        }
+    });
 }
 
 function loadDepartments() {
@@ -258,21 +273,27 @@ function addEmployee() {
                 for (var i = 0; i < resCopy.length; i++) {
                     if (name[i] == answer.managerSelect) {
                         currManager = resCopy[i].id;
-                        parseRole(answer.role)
-                        connection.query("INSERT INTO employee SET ?",
-                            {
-                                first_name: answer.firstName,
-                                last_name: answer.lastName,
-                                role_id: currRole,
-                                manager_id: currManager
-                            },
-                            function (err) {
+                        connection.query("SELECT * FROM role", function (err, res) {
+                            for (var i = 0; i < res.length; i++) {
+                                if (res[i].title == answer.role) {
+                                    currRole = res[i].id;
+                                    connection.query("INSERT INTO employee SET ?",
+                                        {
+                                            first_name: answer.firstName,
+                                            last_name: answer.lastName,
+                                            role_id: currRole,
+                                            manager_id: currManager
+                                        },
+                                        function (err) {
 
-                                if (err) throw err;
-                                console.log("Your employee was created successfully!");
-                                choiceAdd();
+                                            if (err) throw err;
+                                            console.log("Your employee was created successfully!");
+                                            choiceAdd();
+                                        }
+                                    );
+                                }
                             }
-                        );
+                        });
                     }
                 }
             });
