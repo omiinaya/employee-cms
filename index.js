@@ -127,16 +127,6 @@ function sortEmployees() {
     });
 }
 
-function choiceUpdate() {
-    inquirer.prompt(menu.updateMenu).then(function (response) {
-        switch (response.updateSelect) {
-            case "main menu":
-                exec()
-                break;
-        }
-    });
-}
-
 function loadDepartments() {
     connection.query("SELECT * FROM department", function (err, res) {
         console.table(res);
@@ -281,7 +271,7 @@ function addEmployee() {
                 {
                     type: "list",
                     name: "managerSelect",
-                    message: "Please choose employee's manager: ",
+                    message: "Who is the employee's manager?",
                     choices: managers
                 }
             ]).then(function (answer) {
