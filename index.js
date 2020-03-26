@@ -5,6 +5,7 @@ const menu = require("./Assets/menu.js");
 const connection = require("./Assets/db.js");
 
 //definitions and global vars
+var currDepartment;
 var currRole;
 var currManager;
 var currEmployee;
@@ -54,7 +55,7 @@ function choiceRemove() {
     inquirer.prompt(menu.removeMenu).then(function (response) {
         switch (response.removeSelect) {
             case "remove department":
-                //
+                removeDepartment();
                 break;
             case "remove role":
                 //
@@ -221,7 +222,7 @@ function employeesByRole() {
 }
 
 function employeesByDepartment() {
-    //
+    //connection.query("SELECT * FROM department")
 }
 
 function addDepartment() {
@@ -356,6 +357,31 @@ function removeEmployee() {
                     });
                 }
             }
+        });
+    });
+}
+
+function removeDepartment() {
+    var departments = [];
+    connection.query("SELECT * FROM department", function (err, res) {
+        for (var i = 0; i < res.length; i++) {
+            departments.push(res[i].name);
+        }
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "selectDepartment",
+                message: "What department would you like to remove?",
+                choices: departments
+            }
+        ]).then(function (res) {
+            currDepartment = res.selectDepartment;
+            console.log(currDepartment);
+            connection.query("DELETE FROM department WHERE name='" + currDepartment + "'", function (err) {
+                if (err) throw err;
+                console.log("Your department was deleted successfully!");
+                choiceAdd();
+            });
         });
     });
 }
