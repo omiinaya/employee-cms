@@ -137,7 +137,7 @@ function employeesByManager() {
     var managers = [];
     connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, res) {
         var name = [];
-        var test = res;
+        var resCopy = res;
         for (var i = 0; i < res.length; i++) {
             name[i] = res[i].first_name + " " + res[i].last_name;
             managers.push(name[i]);
@@ -148,11 +148,10 @@ function employeesByManager() {
             message: "Please choose employee's manager: ",
             choices: managers
         }).then(function (answer) {
-            console.log(answer);
-            for (var i = 0; i < test.length; i++) {
+            for (var i = 0; i < resCopy.length; i++) {
                 if (name[i] == answer.managerSelect) {
-                    currManager = test[i].id;
-                    connection.query("SELECT * FROM employee WHERE manager_id='"+currManager+"'", function (err, res) {
+                    currManager = resCopy[i].id;
+                    connection.query("SELECT * FROM employee WHERE manager_id='" + currManager + "'", function (err, res) {
                         console.table(res);
                         sortEmployees()
                     });
@@ -162,15 +161,24 @@ function employeesByManager() {
     });
 }
 
-//console.table(data);
-//sortEmployees()
-
 function employeesByRole() {
-    inquirer.prompt(menu.employeesByRole).then(function (data) {
-        parseRole(data.roleId);
-        connection.query("SELECT * FROM employee WHERE role_id='" + currRole + "'", function (err, res) {
-            console.table(res);
-            sortEmployees()
+    var roles = [];
+    connection.query("SELECT * FROM role", function (err, res) {
+        var resCopy = res;
+        for (var i = 0; i < res.length; i++) {
+            roles.push(res[i].title);
+        }
+        inquirer.prompt({
+            type: "list",
+            name: "roleSelect",
+            message: "Please choose employee's manager: ",
+            choices: roles
+        }).then(function (answer) {
+            parseRole(answer.roleSelect);
+            connection.query("SELECT * FROM employee WHERE role_id='" + currRole + "'", function (err, res) {
+                console.table(res);
+                sortEmployees()
+            });
         });
     });
 }
