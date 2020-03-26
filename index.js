@@ -225,7 +225,19 @@ function employeesByDepartment() {
 }
 
 function addDepartment() {
-    //
+    inquirer.prompt(menu.addDepartment).then(function (res) {
+        connection.query("INSERT INTO department SET ?",
+            {
+                name: res.departmentName,
+            },
+            function (err) {
+
+                if (err) throw err;
+                console.log("Your department was created successfully!");
+                choiceAdd();
+            }
+        );
+    });
 }
 
 function addRole() {

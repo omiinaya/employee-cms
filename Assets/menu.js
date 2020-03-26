@@ -166,6 +166,13 @@ const menu = {
             name: "roleDepartment",
             message: "What is the role's department id?"
         }
+    ],
+    addDepartment: [
+        {
+            type: "input",
+            name: "departmentName",
+            message: "What is the deparment's name?"
+        }
     ]
 }
 
