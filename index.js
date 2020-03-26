@@ -6,6 +6,7 @@ const connection = require("./Assets/db.js");
 
 //definitions and global vars
 var currRole;
+var currManager;
 
 //functions
 function exec() {
@@ -109,7 +110,7 @@ function parseRole(a) {
     else if (a == "sales") {
         currRole = 4;
     }
-} 
+}
 
 function loadDepartments() {
     connection.query("SELECT * FROM department", function (err, res) {
@@ -128,23 +129,46 @@ function loadRoles() {
 function loadEmployees() {
     connection.query("SELECT * FROM employee", function (err, res) {
         console.table(res);
-        choiceView();
+        sortEmployees()
     });
 }
 
 function employeesByManager() {
-    inquirer.prompt(menu.employeesByManager).then(function (data) {
-        connection.query("SELECT * FROM employee WHERE manager_id='"+data.managerId+"'", function (err, res) {
-            console.table(res);
-            sortEmployees()
+    var managers = [];
+    connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, res) {
+        var name = [];
+        var test = res;
+        for (var i = 0; i < res.length; i++) {
+            name[i] = res[i].first_name + " " + res[i].last_name;
+            managers.push(name[i]);
+        }
+        inquirer.prompt({
+            type: "list",
+            name: "managerSelect",
+            message: "Please choose employee's manager: ",
+            choices: managers
+        }).then(function (answer) {
+            console.log(answer);
+            for (var i = 0; i < test.length; i++) {
+                if (name[i] == answer.managerSelect) {
+                    currManager = test[i].id;
+                    connection.query("SELECT * FROM employee WHERE manager_id='"+currManager+"'", function (err, res) {
+                        console.table(res);
+                        sortEmployees()
+                    });
+                }
+            }
         });
     });
 }
 
+//console.table(data);
+//sortEmployees()
+
 function employeesByRole() {
     inquirer.prompt(menu.employeesByRole).then(function (data) {
         parseRole(data.roleId);
-        connection.query("SELECT * FROM employee WHERE role_id='"+currRole+"'", function (err, res) {
+        connection.query("SELECT * FROM employee WHERE role_id='" + currRole + "'", function (err, res) {
             console.table(res);
             sortEmployees()
         });
