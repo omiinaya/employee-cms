@@ -101,9 +101,6 @@ function sortEmployees() {
             case "view employees by manager":
                 employeesByManager();
                 break;
-            case "view employees by department":
-                employeesByDepartment();
-                break;
             case "main menu":
                 exec();
                 break;
@@ -195,10 +192,6 @@ function employeesByRole() {
             });
         });
     });
-}
-
-function employeesByDepartment() {
-    //connection.query("SELECT * FROM department")
 }
 
 function addDepartment() {

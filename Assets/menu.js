@@ -82,7 +82,6 @@ const menu = {
                     "view all employees",
                     "view employees by role",
                     "view employees by manager",
-                    "view employees by department",
                     "main menu"
                 ]
             }
