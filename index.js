@@ -166,7 +166,10 @@ function employeesByManager() {
             for (var i = 0; i < resCopy.length; i++) {
                 if (name[i] == answer.managerSelect) {
                     currManager = resCopy[i].id;
-                    connection.query("SELECT * FROM employee WHERE manager_id='" + currManager + "'", function (err, res) {
+                    console.log("currManager:"+currManager);
+                    var query = "SELECT * FROM employee WHERE manager_id='"+currManager+"'";
+                    console.log(query);
+                    connection.query(query, function (err, res) {
                         console.table(res);
                         sortEmployees()
                     });
