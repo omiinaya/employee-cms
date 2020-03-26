@@ -148,8 +148,25 @@ const menu = {
                 type: "input",
                 name: "managerId",
                 message: "Please enter the employee manager's ID: ",
-            },
+            }
         ],
+    addRole: [
+        {
+            type: "input",
+            name: "roleTitle",
+            message: "What is the role's name?"
+        },
+        {
+            type: "input",
+            name: "roleSalary",
+            message: "What is the role's salary?"
+        },
+        {
+            type: "input",
+            name: "roleDepartment",
+            message: "What is the role's department id?"
+        }
+    ]
 }
 
 module.exports = menu;
