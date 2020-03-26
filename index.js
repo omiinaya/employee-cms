@@ -166,8 +166,8 @@ function employeesByManager() {
             for (var i = 0; i < resCopy.length; i++) {
                 if (name[i] == answer.managerSelect) {
                     currManager = resCopy[i].id;
-                    console.log("currManager:"+currManager);
-                    var query = "SELECT * FROM employee WHERE manager_id='"+currManager+"'";
+                    console.log("currManager:" + currManager);
+                    var query = "SELECT * FROM employee WHERE manager_id='" + currManager + "'";
                     console.log(query);
                     connection.query(query, function (err, res) {
                         console.table(res);
@@ -395,20 +395,37 @@ function updateEmployeeRole() {
     var employees = [];
     var name;
     connection.query("SELECT * FROM employee", function (err, res) {
+        var resCopy = res;
         for (var i = 0; i < res.length; i++) {
             name = res[i].first_name + " " + res[i].last_name;
             employees.push(name);
         }
         inquirer.prompt({
             type: "list",
-            name: "employeeRole",
+            name: "employeeSelect",
             message: "What employee would you like to update the role of?",
             choices: employees
 
         }).then(function (res) {
-
+            for (var i = 0; i < resCopy.length; i++) {
+                //console.log(name);
+                console.log(res.employeeSelect);
+                //issue is name isn't selected person currently.
+                if (name == res.employeeSelect) {
+                    currEmployee = resCopy[i].id;
+                    inquirer.prompt({
+                        type: "input",
+                        name: "newRole",
+                        message: "What would you like the new role of the employee to be?"
+                    }).then(function (data) {
+                        connection.query("UPDATE role SET title ='" + data.newRole + "' WHERE name ='" + currEmployee + "'", function (err, res) {
+                        });
+                    });
+                    break;
+                }
+            }
         });
-    })
+    });
 
 }
 
