@@ -89,6 +89,25 @@ function choiceView() {
     });
 }
 
+function choiceUpdate() {
+    inquirer.prompt(menu.updateMenu).then(function (response) {
+        switch (response.viewSelect) {
+            case "update employee":
+                //
+                break;
+            case "update employee role":
+                //
+                break;
+            case "update employee manager":
+                //
+                break;
+            case "main menu":
+                exec();
+                break;
+        }
+    });
+}
+
 function sortEmployees() {
     inquirer.prompt(menu.viewEmployeesBy).then(function (response) {
         switch (response.employeesBy) {
