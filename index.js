@@ -121,20 +121,6 @@ function choiceUpdate() {
     });
 }
 
-function parseRole(a) {
-    console.log("value of a: " + a);
-    connection.query("SELECT * FROM role", function (err, res) {
-        //console.log(res[0].title);
-        for (var i = 0; i < res.length; i++) {
-            //console.log(res[i].title);
-            if (res[i].title == a) {
-                //console.log("test");
-                currRole = res[i].id;
-            }
-        }
-    });
-}
-
 function loadDepartments() {
     connection.query("SELECT * FROM department", function (err, res) {
         console.table(res);
