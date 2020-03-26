@@ -9,6 +9,7 @@ const menu = {
                 message: "What would you like to do?",
                 choices: [
                     "add",
+                    "remove",
                     "view",
                     "update",
                     "exit"
@@ -25,6 +26,20 @@ const menu = {
                     "add department",
                     "add role",
                     "add employee",
+                    "main menu"
+                ]
+            }
+        ],
+    removeMenu:
+        [
+            {
+                type: "list",
+                name: "removeSelect",
+                message: "What would you like to remove?",
+                choices: [
+                    "remove department",
+                    "remove role",
+                    "remove employee",
                     "main menu"
                 ]
             }

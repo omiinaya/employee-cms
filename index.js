@@ -15,6 +15,9 @@ function exec() {
             case "add":
                 choiceAdd();
                 break;
+            case "remove":
+                choiceRemove();
+                break;
             case "view":
                 choiceView();
                 break;
@@ -37,6 +40,25 @@ function choiceAdd() {
                 addRoleMenu();
                 break;
             case "add employee":
+                addEmployeeMenu();
+                break;
+            case "main menu":
+                exec();
+                break;
+        }
+    });
+}
+
+function choiceRemove() {
+    inquirer.prompt(menu.removeMenu).then(function (response) {
+        switch (response.removeSelect) {
+            case "remove department":
+                //
+                break;
+            case "remove role":
+                //
+                break;
+            case "remove employee":
                 addEmployeeMenu();
                 break;
             case "main menu":
@@ -250,7 +272,7 @@ function addEmployeeMenu() {
                                 manager_id: currManager
                             },
                             function (err) {
-                
+
                                 if (err) throw err;
                                 console.log("Your employee was created successfully!");
                                 choiceAdd();
@@ -261,6 +283,10 @@ function addEmployeeMenu() {
             });
         });
     });
+}
+
+function removeEmployeeMenu() {
+
 }
 
 var init = new exec();
