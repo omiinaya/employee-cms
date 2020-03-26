@@ -7,6 +7,7 @@ const connection = require("./Assets/db.js");
 //definitions and global vars
 var currRole;
 var currManager;
+var currEmployee;
 
 //functions
 function exec() {
@@ -34,13 +35,13 @@ function choiceAdd() {
     inquirer.prompt(menu.addMenu).then(function (response) {
         switch (response.addSelect) {
             case "add department":
-                addDepartmentMenu();
+                addDepartment();
                 break;
             case "add role":
-                addRoleMenu();
+                addRole();
                 break;
             case "add employee":
-                addEmployeeMenu();
+                addEmployee();
                 break;
             case "main menu":
                 exec();
@@ -59,7 +60,7 @@ function choiceRemove() {
                 //
                 break;
             case "remove employee":
-                addEmployeeMenu();
+                removeEmployee();
                 break;
             case "main menu":
                 exec();
@@ -208,21 +209,15 @@ function employeesByDepartment() {
     //
 }
 
-function addDepartmentMenu() {
-    console.log("placeholder");
-    inquirer.prompt(menu.addDepartment).then(function (response) {
-        //
-    });
+function addDepartment() {
+    //
 }
 
-function addRoleMenu() {
-    console.log("placeholder");
-    inquirer.prompt(menu.addRole).then(function (response) {
-        //
-    });
+function addRole() {
+    //
 }
 
-function addEmployeeMenu() {
+function addEmployee() {
     var roles = [];
     var managers = [];
     connection.query("SELECT * FROM role", function (err, roleRes) {
@@ -285,8 +280,37 @@ function addEmployeeMenu() {
     });
 }
 
-function removeEmployeeMenu() {
+function removeEmployee() {
+    var employees = [];
+    connection.query("SELECT * FROM employee", function (err, res) {
+        var name = [];
+        var resCopy = res;
+        for (var i = 0; i < res.length; i++) {
+            name[i] = res[i].first_name + " " + res[i].last_name;
+            employees.push(name[i]);
+        }
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "employeeSelect",
+                message: "What employee would you like to remove? ",
+                choices: employees
+            }
+        ]).then(function (answer) {
+            for (var i = 0; i < resCopy.length; i++) {
+                if (name[i] == answer.employeeSelect) {
+                    currEmployee = resCopy[i].id;
+                    console.log(currEmployee);
+                    connection.query("DELETE FROM employee WHERE id='" + currEmployee + "'", function (err) {
 
+                        if (err) throw err;
+                        console.log("Your employee was deleted successfully!");
+                        choiceAdd();
+                    });
+                }
+            }
+        });
+    });
 }
 
 var init = new exec();
