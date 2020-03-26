@@ -164,7 +164,6 @@ function employeesByManager() {
 function employeesByRole() {
     var roles = [];
     connection.query("SELECT * FROM role", function (err, res) {
-        var resCopy = res;
         for (var i = 0; i < res.length; i++) {
             roles.push(res[i].title);
         }
@@ -202,23 +201,65 @@ function addRoleMenu() {
 }
 
 function addEmployeeMenu() {
-    inquirer.prompt(menu.addEmployee).then(function (answers) {
-        parseRole(answers.role);
-        connection.query(
-            "INSERT INTO employee SET ?",
-            {
-                first_name: answers.firstName,
-                last_name: answers.lastName,
-                role_id: currRole,
-                manager_id: answers.managerId
-            },
-            function (err) {
-
-                if (err) throw err;
-                console.log("Your employee was created successfully!");
-                choiceAdd();
+    var roles = [];
+    var managers = [];
+    connection.query("SELECT * FROM role", function (err, roleRes) {
+        for (var i = 0; i < roleRes.length; i++) {
+            roles.push(roleRes[i].title);
+        }
+        connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, res) {
+            var name = [];
+            var resCopy = res;
+            for (var i = 0; i < res.length; i++) {
+                name[i] = res[i].first_name + " " + res[i].last_name;
+                managers.push(name[i]);
             }
-        );
+            inquirer.prompt([
+                {
+                    type: "input",
+                    name: "firstName",
+                    message: "What is the first name of the employee?",
+                },
+                {
+                    type: "input",
+                    name: "lastName",
+                    message: "What is the last name of the employee?",
+                },
+                {
+                    type: "list",
+                    name: "role",
+                    message: "What is the employee's role?",
+                    choices: roles
+                },
+                {
+                    type: "list",
+                    name: "managerSelect",
+                    message: "Please choose employee's manager: ",
+                    choices: managers
+                }
+            ]).then(function (answer) {
+                for (var i = 0; i < resCopy.length; i++) {
+                    if (name[i] == answer.managerSelect) {
+                        currManager = resCopy[i].id;
+                        parseRole(answer.role)
+                        connection.query("INSERT INTO employee SET ?",
+                            {
+                                first_name: answer.firstName,
+                                last_name: answer.lastName,
+                                role_id: currRole,
+                                manager_id: currManager
+                            },
+                            function (err) {
+                
+                                if (err) throw err;
+                                console.log("Your employee was created successfully!");
+                                choiceAdd();
+                            }
+                        );
+                    }
+                }
+            });
+        });
     });
 }
 
