@@ -389,39 +389,52 @@ function removeRole() {
 }
 
 function updateEmployeeRole() {
-    var employees = [];
-    var name = [];
-    connection.query("SELECT * FROM employee", function (err, res) {
-        var resCopy = res;
-        for (var i = 0; i < res.length; i++) {
-            name[i] = res[i].first_name + " " + res[i].last_name;
-            employees.push(name[i]);
+    var roles = [];
+    connection.query("SELECT * FROM role", function (err, response) {
+        for (var i = 0; i < response.length; i++) {
+            roles.push(response[i].title);
         }
-        inquirer.prompt({
-            type: "list",
-            name: "employeeSelect",
-            message: "What employee would you like to update the role of?",
-            choices: employees
-
-        }).then(function (res) {
-            for (var i = 0; i < resCopy.length; i++) {
-                console.log(res.employeeSelect);
-                if (name[i] == res.employeeSelect) {
-                    currEmployee = resCopy[i].id;
-                    inquirer.prompt({
-                        type: "input",
-                        name: "newRole",
-                        message: "What would you like the new role of the employee to be?"
-                    }).then(function (data) {
-                        connection.query("UPDATE role SET title ='" + data.newRole + "' WHERE name ='" + currEmployee + "'", function (err, res) {
-                        });
-                    });
-                    break;
-                }
+        var employees = [];
+        var name = [];
+        connection.query("SELECT * FROM employee", function (err, res) {
+            for (var i = 0; i < res.length; i++) {
+                name[i] = res[i].first_name + " " + res[i].last_name;
+                employees.push(name[i]);
             }
-        });
-    });
+            inquirer.prompt({
+                type: "list",
+                name: "employeeSelect",
+                message: "What employee would you like to update the role of?",
+                choices: employees
 
+            }).then(function (answer) {
+                for (var i = 0; i < res.length; i++) {
+                    if (name[i] == answer.employeeSelect) {
+                        currEmployee = res[i].id;
+                        inquirer.prompt({
+                            type: "list",
+                            name: "newRole",
+                            message: "What would you like the new role of the employee to be?",
+                            choices: roles
+                        }).then(function (data) {
+                            for (var i = 0; i < response.length; i++) {
+                                if (response[i].title == data.newRole) {
+                                    currRole = response[i].id;
+                                    connection.query("UPDATE employee SET role_id ='" + currRole + "' WHERE id ='" + currEmployee + "'", function (err, res) {
+                                        if (err) throw err;
+                                        console.log("Your employee's role was updated successfully!");
+                                        choiceUpdate()
+                                    });
+                                }
+                            }
+                        });
+                        break;
+                    }
+                }
+            });
+        });
+
+    });
 }
 
 var init = new exec();
