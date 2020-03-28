@@ -393,12 +393,12 @@ function removeRole() {
 
 function updateEmployeeRole() {
     var employees = [];
-    var name;
+    var name = [];
     connection.query("SELECT * FROM employee", function (err, res) {
         var resCopy = res;
         for (var i = 0; i < res.length; i++) {
-            name = res[i].first_name + " " + res[i].last_name;
-            employees.push(name);
+            name[i] = res[i].first_name + " " + res[i].last_name;
+            employees.push(name[i]);
         }
         inquirer.prompt({
             type: "list",
@@ -411,7 +411,7 @@ function updateEmployeeRole() {
                 //console.log(name);
                 console.log(res.employeeSelect);
                 //issue is name isn't selected person currently.
-                if (name == res.employeeSelect) {
+                if (name[i] == res.employeeSelect) {
                     currEmployee = resCopy[i].id;
                     inquirer.prompt({
                         type: "input",
