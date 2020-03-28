@@ -137,7 +137,6 @@ function employeesByManager() {
     var managers = [];
     connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, res) {
         var name = [];
-        var resCopy = res;
         for (var i = 0; i < res.length; i++) {
             name[i] = res[i].first_name + " " + res[i].last_name;
             managers.push(name[i]);
@@ -148,9 +147,9 @@ function employeesByManager() {
             message: "Please choose employee's manager: ",
             choices: managers
         }).then(function (answer) {
-            for (var i = 0; i < resCopy.length; i++) {
+            for (var i = 0; i < res.length; i++) {
                 if (name[i] == answer.managerSelect) {
-                    currManager = resCopy[i].id;
+                    currManager = res[i].id;
                     console.log("currManager:" + currManager);
                     var query = "SELECT * FROM employee WHERE manager_id='" + currManager + "'";
                     console.log(query);
@@ -236,7 +235,6 @@ function addEmployee() {
         }
         connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, res) {
             var name = [];
-            var resCopy = res;
             for (var i = 0; i < res.length; i++) {
                 name[i] = res[i].first_name + " " + res[i].last_name;
                 managers.push(name[i]);
@@ -265,9 +263,9 @@ function addEmployee() {
                     choices: managers
                 }
             ]).then(function (answer) {
-                for (var i = 0; i < resCopy.length; i++) {
+                for (var i = 0; i < res.length; i++) {
                     if (name[i] == answer.managerSelect) {
-                        currManager = resCopy[i].id;
+                        currManager = res[i].id;
                         connection.query("SELECT * FROM role", function (err, res) {
                             for (var i = 0; i < res.length; i++) {
                                 if (res[i].title == answer.role) {
@@ -300,7 +298,6 @@ function removeEmployee() {
     var employees = [];
     connection.query("SELECT * FROM employee", function (err, res) {
         var name = [];
-        var resCopy = res;
         for (var i = 0; i < res.length; i++) {
             name[i] = res[i].first_name + " " + res[i].last_name;
             employees.push(name[i]);
@@ -313,9 +310,9 @@ function removeEmployee() {
                 choices: employees
             }
         ]).then(function (answer) {
-            for (var i = 0; i < resCopy.length; i++) {
+            for (var i = 0; i < res.length; i++) {
                 if (name[i] == answer.employeeSelect) {
-                    currEmployee = resCopy[i].id;
+                    currEmployee = res[i].id;
                     connection.query("DELETE FROM employee WHERE id='" + currEmployee + "'", function (err) {
 
                         if (err) throw err;
