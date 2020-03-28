@@ -209,20 +209,48 @@ function addDepartment() {
 }
 
 function addRole() {
-    inquirer.prompt(menu.addRole).then(function (res) {
-        connection.query("INSERT INTO role SET ?",
+    var departments = [];
+    connection.query("SELECT * FROM department", function (err, response) {
+        for (var i = 0; i < response.length; i++) {
+            departments.push(response[i].name);
+        }
+        inquirer.prompt([
             {
-                title: res.roleTitle,
-                salary: res.roleSalary,
-                department_id: res.roleDepartment,
+                type: "input",
+                name: "roleTitle",
+                message: "What is the role's name?"
             },
-            function (err) {
-
-                if (err) throw err;
-                console.log("Your role was created successfully!");
-                choiceAdd();
+            {
+                type: "input",
+                name: "roleSalary",
+                message: "What is the role's salary?"
+            },
+            {
+                type: "list",
+                name: "roleDepartment",
+                message: "What department does the role belong in?",
+                choices: departments
             }
-        );
+        ]).then(function (res) {
+            for (var i = 0; i < response.length; i++) {
+                if (departments[i] == res.roleDepartment) {
+                    currDepartment = response[i].id;
+                    connection.query("INSERT INTO role SET ?",
+                        {
+                            title: res.roleTitle,
+                            salary: res.roleSalary,
+                            department_id: currDepartment
+                        },
+                        function (err) {
+
+                            if (err) throw err;
+                            console.log("Your role was created successfully!");
+                            choiceAdd();
+                        }
+                    );
+                }
+            }
+        });
     });
 }
 

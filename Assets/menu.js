@@ -85,69 +85,6 @@ const menu = {
                 ]
             }
         ],
-    employeesByManager:
-        [
-            {
-                type: "input",
-                name: "managerId",
-                message: "Please enter manager id: "
-            }
-        ],
-    employeesByRole:
-        [
-
-            {
-                type: "list",
-                name: "roleId",
-                message: "Please choose role to filter by: ",
-                choices: [
-                    "management",
-                    "engineering",
-                    "legal",
-                    "sales"
-                ]
-            }
-
-        ],
-    employeesByDept:
-        [
-
-            {
-                type: "input",
-                name: "departmentId",
-                message: "Please enter department id: "
-            }
-
-        ],
-    addEmployee:
-        [
-            {
-                type: "input",
-                name: "firstName",
-                message: "What is the first name of the employee?",
-            },
-            {
-                type: "input",
-                name: "lastName",
-                message: "What is the last name of the employee?",
-            },
-            {
-                type: "list",
-                name: "role",
-                message: "Select the employee's role: ",
-                choices: [
-                    "management",
-                    "engineering",
-                    "legal",
-                    "sales"
-                ]
-            },
-            {
-                type: "input",
-                name: "managerId",
-                message: "Please enter the employee manager's ID: ",
-            }
-        ],
     addRole: [
         {
             type: "input",
