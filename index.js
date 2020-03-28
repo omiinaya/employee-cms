@@ -92,9 +92,6 @@ function choiceView() {
 function choiceUpdate() {
     inquirer.prompt(menu.updateMenu).then(function (response) {
         switch (response.updateSelect) {
-            case "update employee":
-                //
-                break;
             case "update employee role":
                 updateEmployeeRole()
                 break;
@@ -408,9 +405,7 @@ function updateEmployeeRole() {
 
         }).then(function (res) {
             for (var i = 0; i < resCopy.length; i++) {
-                //console.log(name);
                 console.log(res.employeeSelect);
-                //issue is name isn't selected person currently.
                 if (name[i] == res.employeeSelect) {
                     currEmployee = resCopy[i].id;
                     inquirer.prompt({
