@@ -74,10 +74,16 @@ function choiceView() {
     inquirer.prompt(menu.viewMenu).then(function (response) {
         switch (response.viewSelect) {
             case "view departments":
-                loadDepartments();
+                connection.query("SELECT * FROM department", function (err, res) {
+                    console.table(res);
+                    choiceView();
+                });
                 break;
             case "view roles":
-                loadRoles();
+                connection.query("SELECT * FROM role", function (err, res) {
+                    console.table(res);
+                    choiceView();
+                });
                 break;
             case "view employees":
                 sortEmployees();
@@ -109,7 +115,10 @@ function sortEmployees() {
     inquirer.prompt(menu.viewEmployeesBy).then(function (response) {
         switch (response.employeesBy) {
             case "view all employees":
-                loadEmployees();
+                connection.query("SELECT * FROM employee", function (err, res) {
+                    console.table(res);
+                    sortEmployees()
+                });
                 break;
             case "view employees by role":
                 employeesByRole()
@@ -121,27 +130,6 @@ function sortEmployees() {
                 exec();
                 break;
         }
-    });
-}
-
-function loadDepartments() {
-    connection.query("SELECT * FROM department", function (err, res) {
-        console.table(res);
-        choiceView();
-    });
-}
-
-function loadRoles() {
-    connection.query("SELECT * FROM role", function (err, res) {
-        console.table(res);
-        choiceView();
-    });
-}
-
-function loadEmployees() {
-    connection.query("SELECT * FROM employee", function (err, res) {
-        console.table(res);
-        sortEmployees()
     });
 }
 
