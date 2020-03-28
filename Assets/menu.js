@@ -1,5 +1,3 @@
-const connection = require("./db.js");
-
 const menu = {
     mainMenu:
         [
@@ -85,23 +83,6 @@ const menu = {
                 ]
             }
         ],
-    addRole: [
-        {
-            type: "input",
-            name: "roleTitle",
-            message: "What is the role's name?"
-        },
-        {
-            type: "input",
-            name: "roleSalary",
-            message: "What is the role's salary?"
-        },
-        {
-            type: "input",
-            name: "roleDepartment",
-            message: "What is the role's department id?"
-        }
-    ],
     addDepartment: [
         {
             type: "input",
