@@ -93,10 +93,10 @@ function choiceUpdate() {
     inquirer.prompt(menu.updateMenu).then(function (response) {
         switch (response.updateSelect) {
             case "update employee role":
-                updateEmployeeRole()
+                updateEmployeeRole();
                 break;
             case "update employee manager":
-                //
+                updateEmployeeManager();
                 break;
             case "main menu":
                 exec();
@@ -423,6 +423,58 @@ function updateEmployeeRole() {
                                     connection.query("UPDATE employee SET role_id ='" + currRole + "' WHERE id ='" + currEmployee + "'", function (err, res) {
                                         if (err) throw err;
                                         console.log("Your employee's role was updated successfully!");
+                                        choiceUpdate()
+                                    });
+                                }
+                            }
+                        });
+                        break;
+                    }
+                }
+            });
+        });
+
+    });
+}
+
+function updateEmployeeManager() {
+    var managers = [];
+    var managerName = [];
+    connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, response) {
+        for (var i = 0; i < response.length; i++) {
+            managerName[i] = response[i].first_name + " " + response[i].last_name;
+            managers.push(managerName[i]);
+        }
+        var employees = [];
+        var name = [];
+        connection.query("SELECT * FROM employee", function (err, res) {
+            for (var i = 0; i < res.length; i++) {
+                name[i] = res[i].first_name + " " + res[i].last_name;
+                employees.push(name[i]);
+            }
+            inquirer.prompt({
+                type: "list",
+                name: "employeeSelect",
+                message: "What employee would you like to update the manager of?",
+                choices: employees
+
+            }).then(function (answer) {
+                for (var i = 0; i < res.length; i++) {
+                    if (name[i] == answer.employeeSelect) {
+                        currEmployee = res[i].id;
+                        inquirer.prompt({
+                            type: "list",
+                            name: "newManager",
+                            message: "Who would you like to be the new manager of the employee?",
+                            choices: managers
+                        }).then(function (data) {
+                            for (var i = 0; i < response.length; i++) {
+                                managerName[i] = response[i].first_name + " " + response[i].last_name;
+                                if (managerName[i] == data.newManager) {
+                                    currManager = response[i].id;
+                                    connection.query("UPDATE employee SET manager_id ='" + currManager + "' WHERE id ='" + currEmployee + "'", function (err, res) {
+                                        if (err) throw err;
+                                        console.log("Your employee's manager was updated successfully!");
                                         choiceUpdate()
                                     });
                                 }
