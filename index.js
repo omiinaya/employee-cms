@@ -75,12 +75,14 @@ function choiceView() {
         switch (response.viewSelect) {
             case "view departments":
                 connection.query("SELECT * FROM department", function (err, res) {
+                    if (err) throw err;
                     console.table(res);
                     choiceView();
                 });
                 break;
             case "view roles":
                 connection.query("SELECT * FROM role", function (err, res) {
+                    if (err) throw err;
                     console.table(res);
                     choiceView();
                 });
@@ -116,12 +118,13 @@ function sortEmployees() {
         switch (response.employeesBy) {
             case "view all employees":
                 connection.query("SELECT * FROM employee", function (err, res) {
+                    if (err) throw err;
                     console.table(res);
-                    sortEmployees()
+                    sortEmployees();
                 });
                 break;
             case "view employees by role":
-                employeesByRole()
+                employeesByRole();
                 break;
             case "view employees by manager":
                 employeesByManager();
@@ -135,7 +138,8 @@ function sortEmployees() {
 
 function employeesByManager() {
     var managers = [];
-    connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, res) {
+    connection.query("SELECT * FROM employee WHERE role_id = ?", ["1"], function (err, res) {
+        if (err) throw err;
         var name = [];
         for (var i = 0; i < res.length; i++) {
             name[i] = res[i].first_name + " " + res[i].last_name;
@@ -151,11 +155,10 @@ function employeesByManager() {
                 if (name[i] == answer.managerSelect) {
                     currManager = res[i].id;
                     console.log("currManager:" + currManager);
-                    var query = "SELECT * FROM employee WHERE manager_id='" + currManager + "'";
-                    console.log(query);
-                    connection.query(query, function (err, res) {
+                    connection.query("SELECT * FROM employee WHERE manager_id = ?", [currManager], function (err, res) {
+                        if (err) throw err;
                         console.table(res);
-                        sortEmployees()
+                        sortEmployees();
                     });
                     break;
                 }
@@ -167,22 +170,25 @@ function employeesByManager() {
 function employeesByRole() {
     var roles = [];
     connection.query("SELECT * FROM role", function (err, res) {
+        if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             roles.push(res[i].title);
         }
         inquirer.prompt({
             type: "list",
             name: "roleSelect",
-            message: "Please choose employee's manager: ",
+            message: "Please choose employee's role: ",
             choices: roles
         }).then(function (answer) {
             connection.query("SELECT * FROM role", function (err, res) {
+                if (err) throw err;
                 for (var i = 0; i < res.length; i++) {
                     if (res[i].title == answer.roleSelect) {
                         currRole = res[i].id;
-                        connection.query("SELECT * FROM employee WHERE role_id='" + currRole + "'", function (err, res) {
+                        connection.query("SELECT * FROM employee WHERE role_id = ?", [currRole], function (err, res) {
+                            if (err) throw err;
                             console.table(res);
-                            sortEmployees()
+                            sortEmployees();
                         });
                         break;
                     }
@@ -199,7 +205,6 @@ function addDepartment() {
                 name: res.departmentName,
             },
             function (err) {
-
                 if (err) throw err;
                 console.log("Your department was created successfully!");
                 choiceAdd();
@@ -211,6 +216,7 @@ function addDepartment() {
 function addRole() {
     var departments = [];
     connection.query("SELECT * FROM department", function (err, response) {
+        if (err) throw err;
         for (var i = 0; i < response.length; i++) {
             departments.push(response[i].name);
         }
@@ -242,7 +248,6 @@ function addRole() {
                             department_id: currDepartment
                         },
                         function (err) {
-
                             if (err) throw err;
                             console.log("Your role was created successfully!");
                             choiceAdd();
@@ -258,10 +263,12 @@ function addEmployee() {
     var roles = [];
     var managers = [];
     connection.query("SELECT * FROM role", function (err, roleRes) {
+        if (err) throw err;
         for (var i = 0; i < roleRes.length; i++) {
             roles.push(roleRes[i].title);
         }
-        connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, res) {
+        connection.query("SELECT * FROM employee WHERE role_id = ?", ["1"], function (err, res) {
+            if (err) throw err;
             var name = [];
             for (var i = 0; i < res.length; i++) {
                 name[i] = res[i].first_name + " " + res[i].last_name;
@@ -295,6 +302,7 @@ function addEmployee() {
                     if (name[i] == answer.managerSelect) {
                         currManager = res[i].id;
                         connection.query("SELECT * FROM role", function (err, res) {
+                            if (err) throw err;
                             for (var i = 0; i < res.length; i++) {
                                 if (res[i].title == answer.role) {
                                     currRole = res[i].id;
@@ -306,7 +314,6 @@ function addEmployee() {
                                             manager_id: currManager
                                         },
                                         function (err) {
-
                                             if (err) throw err;
                                             console.log("Your employee was created successfully!");
                                             choiceAdd();
@@ -325,6 +332,7 @@ function addEmployee() {
 function removeEmployee() {
     var employees = [];
     connection.query("SELECT * FROM employee", function (err, res) {
+        if (err) throw err;
         var name = [];
         for (var i = 0; i < res.length; i++) {
             name[i] = res[i].first_name + " " + res[i].last_name;
@@ -341,11 +349,10 @@ function removeEmployee() {
             for (var i = 0; i < res.length; i++) {
                 if (name[i] == answer.employeeSelect) {
                     currEmployee = res[i].id;
-                    connection.query("DELETE FROM employee WHERE id='" + currEmployee + "'", function (err) {
-
+                    connection.query("DELETE FROM employee WHERE id = ?", [currEmployee], function (err) {
                         if (err) throw err;
                         console.log("Your employee was deleted successfully!");
-                        choiceRemove()
+                        choiceRemove();
                     });
                 }
             }
@@ -356,6 +363,7 @@ function removeEmployee() {
 function removeDepartment() {
     var departments = [];
     connection.query("SELECT * FROM department", function (err, res) {
+        if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             departments.push(res[i].name);
         }
@@ -368,10 +376,10 @@ function removeDepartment() {
             }
         ]).then(function (res) {
             currDepartment = res.selectDepartment;
-            connection.query("DELETE FROM department WHERE name='" + currDepartment + "'", function (err) {
+            connection.query("DELETE FROM department WHERE name = ?", [currDepartment], function (err) {
                 if (err) throw err;
                 console.log("Your department was deleted successfully!");
-                choiceRemove()
+                choiceRemove();
             });
         });
     });
@@ -380,6 +388,7 @@ function removeDepartment() {
 function removeRole() {
     var roles = [];
     connection.query("SELECT * FROM role", function (err, res) {
+        if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             roles.push(res[i].title);
         }
@@ -392,10 +401,10 @@ function removeRole() {
             }
         ]).then(function (res) {
             currRole = res.selectRole;
-            connection.query("DELETE FROM role WHERE title='" + currRole + "'", function (err) {
+            connection.query("DELETE FROM role WHERE title = ?", [currRole], function (err) {
                 if (err) throw err;
                 console.log("Your role was deleted successfully!");
-                choiceRemove()
+                choiceRemove();
             });
         });
     });
@@ -404,12 +413,14 @@ function removeRole() {
 function updateEmployeeRole() {
     var roles = [];
     connection.query("SELECT * FROM role", function (err, response) {
+        if (err) throw err;
         for (var i = 0; i < response.length; i++) {
             roles.push(response[i].title);
         }
         var employees = [];
         var name = [];
         connection.query("SELECT * FROM employee", function (err, res) {
+            if (err) throw err;
             for (var i = 0; i < res.length; i++) {
                 name[i] = res[i].first_name + " " + res[i].last_name;
                 employees.push(name[i]);
@@ -433,10 +444,10 @@ function updateEmployeeRole() {
                             for (var i = 0; i < response.length; i++) {
                                 if (response[i].title == data.newRole) {
                                     currRole = response[i].id;
-                                    connection.query("UPDATE employee SET role_id ='" + currRole + "' WHERE id ='" + currEmployee + "'", function (err, res) {
+                                    connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [currRole, currEmployee], function (err, res) {
                                         if (err) throw err;
                                         console.log("Your employee's role was updated successfully!");
-                                        choiceUpdate()
+                                        choiceUpdate();
                                     });
                                 }
                             }
@@ -453,7 +464,8 @@ function updateEmployeeRole() {
 function updateEmployeeManager() {
     var managers = [];
     var managerName = [];
-    connection.query("SELECT * FROM employee WHERE role_id='1'", function (err, response) {
+    connection.query("SELECT * FROM employee WHERE role_id = ?", ["1"], function (err, response) {
+        if (err) throw err;
         for (var i = 0; i < response.length; i++) {
             managerName[i] = response[i].first_name + " " + response[i].last_name;
             managers.push(managerName[i]);
@@ -461,6 +473,7 @@ function updateEmployeeManager() {
         var employees = [];
         var name = [];
         connection.query("SELECT * FROM employee", function (err, res) {
+            if (err) throw err;
             for (var i = 0; i < res.length; i++) {
                 name[i] = res[i].first_name + " " + res[i].last_name;
                 employees.push(name[i]);
@@ -485,10 +498,10 @@ function updateEmployeeManager() {
                                 managerName[i] = response[i].first_name + " " + response[i].last_name;
                                 if (managerName[i] == data.newManager) {
                                     currManager = response[i].id;
-                                    connection.query("UPDATE employee SET manager_id ='" + currManager + "' WHERE id ='" + currEmployee + "'", function (err, res) {
+                                    connection.query("UPDATE employee SET manager_id = ? WHERE id = ?", [currManager, currEmployee], function (err, res) {
                                         if (err) throw err;
                                         console.log("Your employee's manager was updated successfully!");
-                                        choiceUpdate()
+                                        choiceUpdate();
                                     });
                                 }
                             }
