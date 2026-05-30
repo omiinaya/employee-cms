@@ -152,7 +152,7 @@ function employeesByManager() {
             choices: managers
         }).then(function (answer) {
             for (var i = 0; i < res.length; i++) {
-                if (name[i] == answer.managerSelect) {
+                if (name[i] === answer.managerSelect) {
                     currManager = res[i].id;
                     console.log("currManager:" + currManager);
                     connection.query("SELECT * FROM employee WHERE manager_id = ?", [currManager], function (err, res) {
