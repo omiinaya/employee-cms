@@ -183,7 +183,7 @@ function employeesByRole() {
             connection.query("SELECT * FROM role", function (err, res) {
                 if (err) throw err;
                 for (var i = 0; i < res.length; i++) {
-                    if (res[i].title == answer.roleSelect) {
+                    if (res[i].title === answer.roleSelect) {
                         currRole = res[i].id;
                         connection.query("SELECT * FROM employee WHERE role_id = ?", [currRole], function (err, res) {
                             if (err) throw err;
